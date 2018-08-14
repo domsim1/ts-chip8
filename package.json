@@ -1,0 +1,22 @@
+{
+  "name": "chip8",
+  "version": "1.0.0",
+  "description": "chip-8 emulator",
+  "main": "src/chip8.ts",
+  "scripts": {
+    "start": "npm run build & http-server site",
+    "build": "browserify src/chip8.ts -p [ tsify --noImplicitAny ] > site/chip8.js",
+    "test": ""
+  },
+  "author": "Domenic Simone",
+  "license": "MIT",
+  "devDependencies": {
+    "browserify": "^16.2.2",
+    "http-server": "^0.11.1",
+    "tsify": "^4.0.0",
+    "tslint": "^5.10.0"
+  },
+  "dependencies": {
+    "typescript": "^2.9.1"
+  }
+}

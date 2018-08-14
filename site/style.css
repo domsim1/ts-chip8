@@ -1,0 +1,40 @@
+html, body {
+  height: 100vh;
+  background: black;
+  padding: 0px;
+  margin: 0px;
+}
+
+.center {
+  padding: 0;
+  margin: auto;
+  display: block;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  border: 1px solid white;
+}
+
+input {
+  background-color: black;
+  color: white;
+  border: 1px solid white;
+}
+
+select {
+  background-color: black;
+  color: white;
+  border: 1px solid white;
+  margin: 10px;
+}
+
+option:hover {
+  background-color: white;
+  color: black;
+}
+
+option:checked {
+  color: black;
+}
