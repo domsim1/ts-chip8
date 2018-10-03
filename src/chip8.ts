@@ -7,8 +7,14 @@ let isSystemLoopKilled = true;
 const cpuHz = 1000 / 500;
 const getRom = new XMLHttpRequest();
 const keyboard = new Keyboard();
-const canvas = (document.getElementById("chip-screen") as HTMLCanvasElement);
-const romSelect = (document.getElementById("rom-select") as HTMLSelectElement);
+const canvas = (document.getElementById("chip-screen") as HTMLCanvasElement | null);
+if (!canvas || canvas.tagName !== "CANVAS") {
+  throw new Error("Could not find canvas with id chip-screen!");
+}
+const romSelect = (document.getElementById("rom-select") as HTMLSelectElement | null);
+if (!romSelect || romSelect.tagName !== "SELECT") {
+  throw new Error("Could not find select with id rom-select!");
+}
 
 romSelect.value = "BREAKOUT";
 romSelect.onchange = () => {
@@ -17,7 +23,7 @@ romSelect.onchange = () => {
   const requestInterval = setInterval(() => {
     if (isSystemLoopKilled) {
       clearInterval(requestInterval);
-      requestRom();
+      requestRom(romSelect);
     }
   }, cpuHz * 2);
 };
@@ -31,7 +37,7 @@ getRom.onload = () => {
   }
 };
 
-requestRom();
+requestRom(romSelect);
 
 function systemLoop(cpu: CPU, gfx: GFX) {
   if (!systemRunning) {
@@ -49,8 +55,8 @@ function systemLoop(cpu: CPU, gfx: GFX) {
   }, cpuHz);
 }
 
-function requestRom() {
-  getRom.open("GET", `roms/${romSelect.value}`, true);
+function requestRom(rs: HTMLSelectElement) {
+  getRom.open("GET", `roms/${rs.value}`, true);
   getRom.responseType = "arraybuffer";
   getRom.send();
 }

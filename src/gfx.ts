@@ -3,6 +3,7 @@ export class GFX {
   private rows = 32;
   private columns = 64;
   private scale: number;
+  private ctx: CanvasRenderingContext2D | null;
 
   constructor(
     canvas: HTMLCanvasElement,
@@ -12,19 +13,22 @@ export class GFX {
     this.canvas.width = this.columns * scale;
     this.canvas.height = this.rows * scale;
     this.scale = scale;
+    this.ctx = this.canvas.getContext("2d");
   }
 
   public render(gfx: Uint8Array) {
-    const ctx = this.canvas.getContext("2d");
+    if (!this.ctx) {
+      return;
+    }
     for (let i = 0; i < (this.columns * this.rows); i++) {
       const x = (i % this.columns) * this.scale;
       const y = Math.floor(i / this.columns) * this.scale;
       if (gfx[i]) {
-        (ctx as CanvasRenderingContext2D).fillStyle = "#FFF";
-        (ctx as CanvasRenderingContext2D).fillRect(x, y, this.scale, this.scale);
+        this.ctx.fillStyle = "#FFF";
+        this.ctx.fillRect(x, y, this.scale, this.scale);
       } else {
-        (ctx as CanvasRenderingContext2D).fillStyle = "#000";
-        (ctx as CanvasRenderingContext2D).fillRect(x, y, this.scale, this.scale);
+        this.ctx.fillStyle = "#000";
+        this.ctx.fillRect(x, y, this.scale, this.scale);
       }
     }
   }
