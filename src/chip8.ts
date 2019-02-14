@@ -4,7 +4,7 @@ import { Keyboard } from "./keyboard";
 
 let systemRunning = false;
 let isSystemLoopKilled = true;
-const cpuHz = 1000 / 500;
+const cycleChunkDelay = 1000 / 500;
 const getRom = new XMLHttpRequest();
 const keyboard = new Keyboard();
 const canvas = (document.getElementById("chip-screen") as HTMLCanvasElement | null);
@@ -25,7 +25,7 @@ romSelect.onchange = () => {
       clearInterval(requestInterval);
       requestRom(romSelect);
     }
-  }, cpuHz * 2);
+  }, 5);
 };
 
 getRom.onload = () => {
@@ -42,17 +42,20 @@ requestRom(romSelect);
 function systemLoop(cpu: CPU, gfx: GFX) {
   if (!systemRunning) {
     isSystemLoopKilled = true;
+    cpu.killTimer();
     return;
   }
   setTimeout(() => {
     isSystemLoopKilled = false;
-    cpu.cycle();
-    if (cpu.drawFlag) {
-      gfx.render(cpu.gfx);
+    for (let i = 0; i < 10; i++) {
+      cpu.cycle();
+      if (cpu.drawFlag) {
+        gfx.render(cpu.gfx);
+      }
+      cpu.setKeys(keyboard.key);
     }
-    cpu.setKeys(keyboard.key);
     systemLoop(cpu, gfx);
-  }, cpuHz);
+  }, cycleChunkDelay);
 }
 
 function requestRom(rs: HTMLSelectElement) {

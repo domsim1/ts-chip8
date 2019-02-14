@@ -15,6 +15,7 @@ export class CPU {
   private stack: Uint16Array = new Uint16Array(16);
   private timerSpeedHz = 1000 / 60;
   private speaker = new Speaker();
+  private timerRef: number | undefined;
 
   constructor(program: Uint8Array) {
     this.loadFontsetIntoMemory();
@@ -29,6 +30,12 @@ export class CPU {
 
   public setKeys(keys: Uint8Array) {
     this.key = keys;
+  }
+
+  public killTimer() {
+    if (this.timerRef) {
+      clearInterval(this.timerRef);
+    }
   }
 
   private handleOpcode() {
@@ -256,12 +263,14 @@ export class CPU {
   }
 
   private updateTimer() {
-    setTimeout(() => {
+    this.timerRef = setTimeout(() => {
       if (this.delayTimer > 0) {
         this.delayTimer -= 1;
       }
       if (this.soundTimer === 1) {
         this.speaker.beep();
+      }
+      if (this.soundTimer > 0) {
         this.soundTimer -= 1;
       }
       this.updateTimer();
