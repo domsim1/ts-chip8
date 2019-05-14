@@ -4,12 +4,12 @@ export class Clock {
   private lastTime = 0.0;
   private clockPeriod: number;
 
-  constructor(freq: number) {
-      this.clockPeriod = 1000 * (1 / freq);
+  constructor(freqHz: number) {
+      this.clockPeriod = 1000 * (1 / freqHz);
       this.lastTime = performance.now();
   }
 
-  public tick(): boolean {
+  public shouldTick(): boolean {
       this.currTime = performance.now();
       if (this.currTime - this.lastTime >= this.clockPeriod) {
           this.lastTime = this.currTime;

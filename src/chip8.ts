@@ -16,7 +16,7 @@ if (!romSelect || romSelect.tagName !== "SELECT") {
   throw new Error("Could not find select with id rom-select!");
 }
 
-romSelect.value = "BREAKOUT";
+romSelect.value = "PONG";
 romSelect.onchange = () => {
   systemRunning = false;
   romSelect.blur();
@@ -50,7 +50,7 @@ function systemLoop(cpu: CPU, gfx: GFX, clock: Clock) {
     isSystemLoopKilled = false;
     cpu.setKeys(keyboard.key);
     for (let i = 0; i < 10; i++) {
-      if (clock.tick()) {
+      if (clock.shouldTick()) {
         cpu.cycle();
       }
     }

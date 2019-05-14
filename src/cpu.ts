@@ -13,7 +13,7 @@ export class CPU {
   private V = new Uint8Array(16);
   private delayTimer = 0;
   private soundTimer = 0;
-  private stack: Uint16Array = new Uint16Array(16);
+  private stack = new Uint16Array(16);
   private speaker = new Speaker();
   private timerRef: number | undefined;
   private clock = new Clock(60);
@@ -312,7 +312,7 @@ export class CPU {
 
   private updateTimer() {
     this.timerRef = setInterval(() => {
-      if (this.clock.tick()) {
+      if (this.clock.shouldTick()) {
         if (this.delayTimer > 0) {
           this.delayTimer -= 1;
         }
